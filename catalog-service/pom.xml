@@ -29,6 +29,7 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<dockerImageName>jules124/bookstore-${project.artifactId}</dockerImageName>
 	</properties>
 	<dependencies>
 
@@ -110,6 +111,22 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<name>${dockerImageName}</name>
+					</image>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>build-image-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
