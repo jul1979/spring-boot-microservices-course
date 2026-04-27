@@ -31,13 +31,26 @@
 		<java.version>21</java.version>
 		<spring-cloud.version>2025.0.2</spring-cloud.version>
 		<dockerImageName>jules124/bookstore-${project.artifactId}</dockerImageName>
+		<instancio.version>5.5.1</instancio.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<version>5.5.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.instancio</groupId>
+			<artifactId>instancio-junit</artifactId>
+			<version>${instancio.version}</version>
 			<scope>test</scope>
 		</dependency>
 
