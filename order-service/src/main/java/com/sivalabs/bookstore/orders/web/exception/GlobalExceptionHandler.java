@@ -1,6 +1,7 @@
 
 package com.sivalabs.bookstore.orders.web.exception;
 
+import com.sivalabs.bookstore.orders.domain.InvalidOrderException;
 import com.sivalabs.bookstore.orders.domain.OrderNotFoundException;
 import java.net.URI;
 import java.time.Instant;
@@ -27,8 +28,8 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     ProblemDetail handleUnhandledException(Exception e) {
-        ProblemDetail problemDetail =
-                ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
+                e.getMessage());
         problemDetail.setTitle("Internal Server Error");
         problemDetail.setType(ISE_FOUND_TYPE);
         problemDetail.setProperty("service", SERVICE_NAME);
@@ -48,7 +49,7 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-/*     @ExceptionHandler(InvalidOrderException.class)
+    @ExceptionHandler(InvalidOrderException.class)
     ProblemDetail handleInvalidOrderException(InvalidOrderException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Invalid Order Creation Request");
@@ -57,18 +58,19 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setProperty("error_category", "Generic");
         problemDetail.setProperty("timestamp", Instant.now());
         return problemDetail;
-    } */
+    }
 
     @Override
-    @Nullable protected ResponseEntity<Object> handleMethodArgumentNotValid(
+    @Nullable
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<String> errors = new ArrayList<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String errorMessage = error.getDefaultMessage();
             errors.add(errorMessage);
         });
-        ProblemDetail problemDetail =
-                ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Invalid request payload");
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                "Invalid request payload");
         problemDetail.setTitle("Bad Request");
         problemDetail.setType(BAD_REQUEST_TYPE);
         problemDetail.setProperty("errors", errors);
