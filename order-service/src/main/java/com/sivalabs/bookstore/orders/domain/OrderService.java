@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sivalabs.bookstore.orders.domain.models.CreateOrderRequest;
 import com.sivalabs.bookstore.orders.domain.models.CreateOrderResponse;
+import com.sivalabs.bookstore.orders.domain.models.OrderCreatedEvent;
 
 @Service
 @Transactional
@@ -15,11 +16,14 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    private OrderValidator orderValidator;
+    private final OrderValidator orderValidator;
 
-    OrderService(OrderRepository orderRepository,OrderValidator orderValidator) {
+    private final OrderEventService orderEventService;
+
+    OrderService(OrderRepository orderRepository, OrderValidator orderValidator, OrderEventService orderEventService) {
         this.orderRepository = orderRepository;
         this.orderValidator = orderValidator;
+        this.orderEventService = orderEventService;
     }
 
     public CreateOrderResponse createOrder(String userName, CreateOrderRequest request) {
@@ -28,6 +32,8 @@ public class OrderService {
         newOrder.setUserName(userName);
         OrderEntity savedOrder = this.orderRepository.save(newOrder);
         log.info("Created Order with orderNumber={}", savedOrder.getOrderNumber());
+        OrderCreatedEvent orderCreatedEvent = OrderEventMapper.buildOrderCreatedEvent(savedOrder);
+        orderEventService.save(orderCreatedEvent);
         return new CreateOrderResponse(savedOrder.getOrderNumber());
     }
 }

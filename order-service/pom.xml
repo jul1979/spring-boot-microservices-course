@@ -31,8 +31,21 @@
 		<java.version>21</java.version>
 		<dockerImageName>jules124/bookstore-${project.artifactId}</dockerImageName>
 		<instancio.version>5.5.1</instancio.version>
+		<shedlock.version>6.10.0</shedlock.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>net.javacrumbs.shedlock</groupId>
+			<artifactId>shedlock-provider-jdbc-template</artifactId>
+			<version>${shedlock.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.javacrumbs.shedlock</groupId>
+			<artifactId>shedlock-spring</artifactId>
+			<version>${shedlock.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.wiremock.integrations.testcontainers</groupId>
