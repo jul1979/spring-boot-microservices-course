@@ -3,7 +3,10 @@ package com.sivalabs.bookstore.orders.domain;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.sivalabs.bookstore.orders.domain.models.CreateOrderRequest;
+import com.sivalabs.bookstore.orders.domain.models.OrderDTO;
 import com.sivalabs.bookstore.orders.domain.models.OrderItem;
 import com.sivalabs.bookstore.orders.domain.models.OrderStatus;
 
@@ -27,5 +30,21 @@ class OrderMapper {
         }
         newOrder.setItems(orderItems);
         return newOrder;
+    }
+
+    static OrderDTO convertToDTO(OrderEntity order) {
+        Set<OrderItem> orderItems = order.getItems().stream()
+                .map(item -> new OrderItem(item.getCode(), item.getName(), item.getPrice(), item.getQuantity()))
+                .collect(Collectors.toSet());
+
+        return new OrderDTO(
+                order.getOrderNumber(),
+                order.getUserName(),
+                orderItems,
+                order.getCustomer(),
+                order.getDeliveryAddress(),
+                order.getStatus(),
+                order.getComments(),
+                order.getCreatedAt());
     }
 }

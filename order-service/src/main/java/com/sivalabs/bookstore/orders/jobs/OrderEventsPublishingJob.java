@@ -12,7 +12,6 @@ import com.sivalabs.bookstore.orders.domain.OrderEventService;
 import net.javacrumbs.shedlock.core.LockAssert;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 
-
 @Component
 public class OrderEventsPublishingJob {
     private static final Logger log = LoggerFactory.getLogger(OrderEventsPublishingJob.class);
@@ -24,9 +23,9 @@ public class OrderEventsPublishingJob {
     }
 
     @Scheduled(cron = "${orders.publish-order-events-job-cron}")
-    //@SchedulerLock(name = "publishOrderEvents")
+    @SchedulerLock(name = "publishOrderEvents")
     public void publishOrderEvents() {
-       // LockAssert.assertLocked();
+        LockAssert.assertLocked();
         log.info("Publishing Order Events at {}", Instant.now());
         orderEventService.publishOrderEvents();
     }
