@@ -12,6 +12,7 @@
     <module>order-service</module>
     <module>notification-service</module>
     <module>api-gateway</module>
+    <module>bookstore-webapp</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
